@@ -1,25 +1,25 @@
+import tkinter as tk
+from tkinter import filedialog, messagebox
 import cv2
 import requests
+import os
+from PIL import Image, ImageTk
 
 
 def capture_image():
-    # Initialize the camera
     cap = cv2.VideoCapture(0)
 
     if not cap.isOpened():
         raise IOError("Cannot open webcam")
 
-    # Capture a frame
     ret, frame = cap.read()
 
     if not ret:
         raise IOError("Failed to capture image")
 
-    # Save the captured image to a file
     image_path = 'captured_image.jpg'
     cv2.imwrite(image_path, frame)
 
-    # Release the camera
     cap.release()
 
     return image_path
@@ -32,9 +32,9 @@ def send_image(image_path, ip_address, port):
     response = requests.post(url, files=files)
 
     if response.status_code == 200:
-        print("Image successfully sent")
+        messagebox.showinfo("Success", "Image successfully sent")
     else:
-        print(f"Failed to send image. Status code: {response.status_code}")
+        messagebox.showerror("Error", f"Failed to send image. Status code: {response.status_code}")
 
 
 def send_user_id(user_id, ip_address, port):
@@ -44,29 +44,69 @@ def send_user_id(user_id, ip_address, port):
     response = requests.post(url, data=data)
 
     if response.status_code == 200:
-        # Save the CSV content to a file
         csv_path = 'user_details.csv'
         with open(csv_path, 'wb') as f:
             f.write(response.content)
-        print(f"CSV saved to {csv_path}")
+        messagebox.showinfo("Success", f"CSV saved to {csv_path}")
     else:
-        print(f"Failed to get CSV. Status code: {response.status_code}")
+        messagebox.showerror("Error", f"Failed to get CSV. Status code: {response.status_code}")
 
 
-if __name__ == "__main__":
-    # Replace with the actual IP address and port
-    ip_address = '192.168.1.1'
-    port = '8000'
+def capture_and_send_image():
+    try:
+        image_path = capture_image()
+        send_image(image_path, ip_address_entry.get(), port_entry.get())
+    except Exception as e:
+        messagebox.showerror("Error", str(e))
 
-    # Replace with the actual user ID
-    user_id = '12345'
 
-    # Capture an image and save it
-    image_path = capture_image()
-    print(f"Image saved to {image_path}")
+def send_existing_image():
+    try:
+        image_path = filedialog.askopenfilename(title="Select Image", filetypes=[("Image Files", "*.jpg *.jpeg *.png")])
+        if image_path:
+            send_image(image_path, ip_address_entry.get(), port_entry.get())
+    except Exception as e:
+        messagebox.showerror("Error", str(e))
 
-    # Send the captured image
-    send_image(image_path, ip_address, port)
 
-    # Send the user ID and get the CSV
-    send_user_id(user_id, ip_address, port)
+def send_user_id_request():
+    try:
+        user_id = user_id_entry.get()
+        if not user_id:
+            raise ValueError("User ID cannot be empty")
+        send_user_id(user_id, ip_address_entry.get(), port_entry.get())
+    except Exception as e:
+        messagebox.showerror("Error", str(e))
+
+
+app = tk.Tk()
+app.title("Image and User ID Client App")
+
+# IP Address
+tk.Label(app, text="IP Address:").grid(row=0, column=0, padx=10, pady=10)
+ip_address_entry = tk.Entry(app)
+ip_address_entry.grid(row=0, column=1, padx=10, pady=10)
+
+# Port
+tk.Label(app, text="Port:").grid(row=1, column=0, padx=10, pady=10)
+port_entry = tk.Entry(app)
+port_entry.grid(row=1, column=1, padx=10, pady=10)
+
+# User ID
+tk.Label(app, text="User ID:").grid(row=2, column=0, padx=10, pady=10)
+user_id_entry = tk.Entry(app)
+user_id_entry.grid(row=2, column=1, padx=10, pady=10)
+
+# Capture and Send Image Button
+capture_button = tk.Button(app, text="Capture and Send Image", command=capture_and_send_image)
+capture_button.grid(row=3, column=0, columnspan=2, pady=10)
+
+# Send Existing Image Button
+send_button = tk.Button(app, text="Send Existing Image", command=send_existing_image)
+send_button.grid(row=4, column=0, columnspan=2, pady=10)
+
+# Send User ID Button
+user_id_button = tk.Button(app, text="Send User ID", command=send_user_id_request)
+user_id_button.grid(row=5, column=0, columnspan=2, pady=10)
+
+app.mainloop()
