@@ -1,4 +1,5 @@
 from flask import Flask, request, jsonify
+import uuid
 import os
 
 app = Flask(__name__)
@@ -35,6 +36,12 @@ def receive_user_id():
     )
     response.headers.set("Content-Disposition", "attachment", filename="user_details.csv")
     return response
+
+
+class SessionManager:
+    @staticmethod
+    def get_session_token():
+        return str(uuid.uuid4())
 
 
 if __name__ == '__main__':

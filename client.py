@@ -73,5 +73,6 @@ def start_auto_capture():
     capture_and_send_image()
     threading.Timer(CAPTURE_INTERVAL, start_auto_capture).start()
 
+
 if __name__ == '__main__':
     start_auto_capture()
