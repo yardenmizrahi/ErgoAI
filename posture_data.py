@@ -1,14 +1,9 @@
+import datetime
 from dataclasses import dataclass
 
 
 @dataclass
 class PostureData:
-    def __init__(self):
-        pass
+    time: datetime.datetime
+    posture_score: float
 
-    @staticmethod
-    def parse_from_dict(PostureData: dict) -> PostureData:
-        pass
-
-    def __dict__(self):
-        pass

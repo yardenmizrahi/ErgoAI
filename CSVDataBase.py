@@ -1,8 +1,10 @@
 import csv
 import os
 
+import AbstractDB
 
-class CSVDatabase:
+
+class CSVDatabase(AbstractDB.AbstractDB):
     @staticmethod
     def insert(table: str, key: str, value: str):
         file_name = table + "_tbl.csv"
