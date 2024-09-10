@@ -1,0 +1,50 @@
+Register:
+
+user           |         server
+---------------|---------------
+username      ->
+password
+
+              <-      user token
+
+
+
+
+
+Getdata:
+
+user           |         server
+---------------|---------------
+username      ->
+password
+user token
+
+              <-     session token
+
+
+session token ->
+user token
+start time
+end time
+
+             <-       data
+
+
+Upload:
+
+user           |         server
+---------------|---------------
+username      ->
+password
+user token
+
+              <-     session token
+
+
+session token ->
+user token
+time
+image data
+
+             <-       received
+
