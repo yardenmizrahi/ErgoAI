@@ -1,4 +1,4 @@
-from RequestData import RequestData
+from DB.RequestData import RequestData
 
 
 class RequestQueue:
@@ -12,3 +12,6 @@ class RequestQueue:
         if len(self.queue) > 0:
             return self.queue.pop(0)
         return None
+
+    def is_empty(self):
+        return len(self.queue) <= 0

@@ -6,4 +6,7 @@ from dataclasses import dataclass
 class PostureData:
     time: datetime.datetime
     posture_score: float
+    user: str
+    posture: str
+    correction: str
 

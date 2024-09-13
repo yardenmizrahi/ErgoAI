@@ -5,7 +5,8 @@ user           |         server
 username      ->
 password
 
-              <-      user token
+              <-      salt
+              <-      client
 
 
 
@@ -16,14 +17,13 @@ Getdata:
 user           |         server
 ---------------|---------------
 username      ->
-password
-user token
+salted password
 
               <-     session token
 
 
 session token ->
-user token
+salted password
 start time
 end time
 
@@ -35,14 +35,13 @@ Upload:
 user           |         server
 ---------------|---------------
 username      ->
-password
-user token
+salted password
 
               <-     session token
 
 
 session token ->
-user token
+salted password
 time
 image data
 

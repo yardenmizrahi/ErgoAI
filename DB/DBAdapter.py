@@ -1,12 +1,22 @@
-from AbstractDB import AbstractDB
-from RequestData import RequestData
-from RequestQueue import RequestQueue
+from DB.AbstractDB import AbstractDB
+from DB.RequestData import RequestData
+from utils.RequestQueue import RequestQueue
 import uuid
 import time
 
+
 class DBAdapter:
+    def handle_all_requests(self):
+        if self.is_idle:
+            self.is_idle = False
+
+            while not self.queue.is_empty():
+                self.process_request()
+
+            self.is_idle = True
+
     class inner_db_methods:
-        def __init__(self, db):
+        def __init__(self, db: AbstractDB):
             self.db = db
 
         def store_db(self, request: RequestData):
@@ -24,9 +34,12 @@ class DBAdapter:
             if self.db:
                 table: str | None = request.payload.get("db_table", None)
                 key: str | None = request.payload.get("db_key", None)
+                keys: str | None = request.payload.get("db_keys", None)
 
                 if table and key:
-                    return self.db.get(table, key)
+                    return self.db.get(table, key=key)
+                elif table and keys:
+                    return self.db.get(table, keys=keys)
                 else:
                     return None
 
@@ -35,6 +48,7 @@ class DBAdapter:
         self.db_mutex = None
         self.db = DBAdapter.inner_db_methods(db)
         self.available_actions = {"store_db": self.db.store_db, "get_db": self.db.get_db}
+        self.is_idle = True
 
     def queue_request(self, request: RequestData) -> bool:
         if request.request_type in self.available_actions.keys():
@@ -44,7 +58,8 @@ class DBAdapter:
 
     def process_request(self):
         current_handled_request = self.queue.pop_request()
-        self.available_actions[current_handled_request.request_type](current_handled_request)
+        current_handled_request.response = (
+            self.available_actions[current_handled_request.request_type](current_handled_request))
 
     def sign_up_new_user(self) -> str:
         """
@@ -75,7 +90,7 @@ class DBAdapter:
                 "db_key": user_token
             }
         )
-        user = self.db.get_db(request_data)
+        user = self.queue_request(request_data)
         return user is not None
 
     def store_user_timed_posture_data(self, user_token: str, posture_data: dict):

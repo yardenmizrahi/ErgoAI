@@ -39,7 +39,6 @@ def authenticate(username, password):
     # Prepare the authentication payload
     auth_payload = {
         'username': username,
-        'password': password,
         'user_token': hashed_password
     }
 

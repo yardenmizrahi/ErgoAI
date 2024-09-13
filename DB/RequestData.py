@@ -16,6 +16,7 @@ class RequestData:
     request_type: str
     session_token: str
     payload: dict
+    response: dict = None
 
 
 def generate(type: str, session_token: str, payload: dict) -> RequestData | None:

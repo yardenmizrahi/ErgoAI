@@ -4,5 +4,5 @@ class AbstractDB:
         pass
 
     @staticmethod
-    def get(table: str, key: str) -> str:
+    def get(table: str, key: str | None = None, keys: list | None = None) -> dict:
         pass

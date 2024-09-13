@@ -1,0 +1,4 @@
+EndpointToRun = ["DB", "Dispathcer", "posture"]
+
+RunClient = false
+
