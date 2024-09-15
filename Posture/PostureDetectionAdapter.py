@@ -1,8 +1,10 @@
 import os
-
 import cv2
+import numpy
+from numpy import shape
 
 from DB.RequestData import RequestData
+from Posture.SittingPostureRecognition import posture_image
 from utils.RequestQueue import RequestQueue
 
 
@@ -38,21 +40,16 @@ class PostureDetectionAdapter:
 
         # Decode the image data from hex string
         image_bytes = bytes.fromhex(image_data)
+        np_array = numpy.frombuffer(image_bytes, dtype=numpy.uint8)
+        img = cv2.imdecode(np_array, cv2.IMREAD_COLOR)
 
-        # Decode the image using OpenCV
-        img = cv2.imdecode(image_bytes, cv2.IMREAD_COLOR)
-
-        # Save the image locally (replace with your desired directory)
-        image_path = os.path.join("images", f"{request.session_token}_{request.payload['time']}.jpg")
-        cv2.imwrite(image_path, img)
-
-        request.result = posture_image.process_image_for_pose_analysis(image_path)
+        request.response = posture_image.process_image_for_pose_analysis(img)
 
         return request.response
 
 
 def test_analyze_with_image_path():
-    image_path = "uploads/captured_image_20240623_143857.jpg"  # Replace with your test image path
+    image_path = "../uploads/captured_image_20240623_143857.jpg"  # Replace with your test image path
     img = cv2.imread(image_path, cv2.IMREAD_COLOR)
     _, img_encoded = cv2.imencode('.jpg', img)
     request_data = RequestData(
@@ -62,11 +59,11 @@ def test_analyze_with_image_path():
             'session_token': "test_token",
             'user_token': "test_user",
             'time': 1234567890,
-            'image_data': img_encoded.tobytes()
+            'image_data': img_encoded.tobytes().hex()
         }
     )
 
-    PostureDetectionAdapter().analyze(request_data)
+    print(PostureDetectionAdapter().analyze(request_data))
 
 
 test_analyze_with_image_path()
