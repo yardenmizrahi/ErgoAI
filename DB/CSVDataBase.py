@@ -1,7 +1,7 @@
 import csv
 import os
 
-from DB.AbstractDB import  AbstractDB
+from DB.AbstractDB import AbstractDB
 
 
 class CSVDatabase(AbstractDB):
@@ -9,6 +9,7 @@ class CSVDatabase(AbstractDB):
     def insert(table: str, key: str, value: str):
         file_name = table + "_tbl.csv"
         file_exists = os.path.isfile(file_name)
+        print(os.path.abspath("."))
 
         data = {}
         if file_exists:

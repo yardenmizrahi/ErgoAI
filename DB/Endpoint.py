@@ -1,19 +1,22 @@
+import sys
 from multiprocessing import Process
 
 from flask import Flask, request, jsonify
-from DB.DBAdapter import DBAdapter
+
 from DB.CSVDataBase import CSVDatabase
+from DB.DBAdapter import DBAdapter
 from DB.RequestData import RequestData
 
 app = Flask(__name__)
-
+PORT = 2985
 db_adapter = DBAdapter(CSVDatabase())
 
-@app.route('/process_request', methods=['POST'])
+
+@app.route('/handle', methods=['POST'])
 def process_request():
     data = request.get_json()
     request_data = RequestData(**data)
-
+    print(request_data)
     if db_adapter.queue_request(request_data):
         db_adapter.handle_all_requests()
         response_data = request_data.response
@@ -23,7 +26,7 @@ def process_request():
 
 
 def run():
-    app.run(port=2985)
+    app.run(port=PORT)
 
 
 def async_run():
@@ -45,4 +48,8 @@ def stop():
 
 
 if __name__ == '__main__':
+    if len(sys.argv) <= 1:
+        run()
+    PORT = sys.argv[1]
     run()
+

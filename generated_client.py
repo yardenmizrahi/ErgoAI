@@ -4,7 +4,6 @@ pip.main(["install", "opencv-python"])
 pip.main(["install", "requests"])
 
 import hashlib
-import uuid
 import cv2
 import requests
 import time

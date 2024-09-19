@@ -1,6 +1,6 @@
 import os
-import tempfile
 import subprocess
+import tempfile
 
 
 def generate_and_obfuscate_script(server_url, salt):

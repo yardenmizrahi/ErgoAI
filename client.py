@@ -1,10 +1,9 @@
+import threading
+from datetime import datetime
 from tkinter import messagebox
 
 import cv2
 import requests
-import os
-import threading
-from datetime import datetime
 
 # Constants for server configuration
 IP_ADDRESS = '127.0.0.1'

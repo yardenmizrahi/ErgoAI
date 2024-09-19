@@ -1,10 +1,8 @@
-import subprocess
-
-from flask import Flask, render_template, request, send_file, jsonify
 import io
 import os
-import tempfile
 import uuid
+
+from flask import Flask, render_template, request, send_file, jsonify
 
 app = Flask(__name__)
 

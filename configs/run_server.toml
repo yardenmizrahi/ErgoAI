@@ -1,4 +1,15 @@
-EndpointToRun = ["DB", "Dispathcer", "posture"]
+EndpointToRun = ["DB", "Dispatcher", "Posture"]
 
 RunClient = false
 
+[Dispatcher]
+Address = "localhost"
+Port = 5000
+
+[Posture]
+Address = "localhost"
+Port = 5100
+
+[DB]
+Adress = "localhost"
+Port = 5200

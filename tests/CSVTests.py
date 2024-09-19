@@ -1,8 +1,8 @@
-import unittest
-import tempfile
 import os
-from io import StringIO
+import unittest
+
 from DB.CSVDataBase import CSVDatabase
+
 
 class TestCSVDatabase(unittest.TestCase):
     def setUp(self):

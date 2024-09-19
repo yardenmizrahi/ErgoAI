@@ -2,11 +2,12 @@ import json
 import multiprocessing
 import os
 import unittest
-from unittest.mock import patch
 from multiprocessing import Process
+
 import requests
-from DB.RequestData import RequestData
+
 import DB.Endpoint
+from DB.RequestData import RequestData
 
 
 def send(type, table, key, value=None):
@@ -46,17 +47,17 @@ def client3(out_dict: dict):
 
 class TestServerEndpoint(unittest.TestCase):
     def setUp(self):
-        self.p = DB.Endpoint.async_run()
+        # self.p = DB.Endpoint.async_run()
         self.file_name = "test"
 
     def tearDown(self):
-        self.p = DB.Endpoint.async_stop(self.p)
+        # self.p = DB.Endpoint.async_stop(self.p)
         if os.path.isfile(self.file_name+"_tbl.csv"):
             os.remove(self.file_name+"_tbl.csv")
 
     @staticmethod
     def send_request_to_db(request_data: RequestData) -> tuple[dict,int]:
-        url = "http://localhost:2985/process_request"
+        url = "http://localhost:2602"
         headers = {'Content-Type': 'application/json'}
         response = requests.post(url, headers=headers, json=vars(request_data))
 

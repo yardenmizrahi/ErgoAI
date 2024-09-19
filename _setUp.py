@@ -1,9 +1,8 @@
 import tkinter as tk
 from tkinter import filedialog, messagebox
+
 import cv2
 import requests
-import os
-from PIL import Image, ImageTk
 
 
 def capture_image():

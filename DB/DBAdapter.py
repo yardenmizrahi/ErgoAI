@@ -1,8 +1,9 @@
+import time
+import uuid
+
 from DB.AbstractDB import AbstractDB
 from DB.RequestData import RequestData
 from utils.RequestQueue import RequestQueue
-import uuid
-import time
 
 
 class DBAdapter:
