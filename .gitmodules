@@ -1,0 +1,3 @@
+[submodule "Posture/SittingPostureRecognition"]
+	path = Posture/SittingPostureRecognition
+	url = https://github.com/0ded/SittingPostureRecognition
