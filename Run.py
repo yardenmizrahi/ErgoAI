@@ -5,7 +5,6 @@ import tomllib
 
 
 def run_endpoint(endpoint, port, toml_file):
-    """Function to run a given endpoint."""
     endpoint_file = f"{endpoint}.Endpoint"
     if os.path.exists(f"{endpoint}\\Endpoint.py"):
         # Execute the Endpoint.py script with the port as an argument
@@ -14,6 +13,16 @@ def run_endpoint(endpoint, port, toml_file):
         return process
     else:
         print(f"Endpoint script for {endpoint} not found at {endpoint_file}.")
+
+# def run_client():
+#     endpoint_file = f"{endpoint}.Endpoint"
+#     if os.path.exists(f"{endpoint}\\Endpoint.py"):
+#         # Execute the Endpoint.py script with the port as an argument
+#         process = (
+#             subprocess.Popen([sys.executable, "-m", endpoint_file, str(port), toml_file], shell=True))
+#         return process
+#     else:
+#         print(f"Script for client not found at {endpoint_file}.")
 
 
 def main(toml_file):
@@ -47,6 +56,8 @@ def main(toml_file):
                 print(f"Port not specified for {endpoint}")
         else:
             print(f"No configuration found for {endpoint}")
+
+    # if run_client:
 
     for endpoint, process in processes:
         stdout, stderr = process.communicate()  # Capture output if needed

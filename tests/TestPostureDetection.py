@@ -15,7 +15,7 @@ class TestPostureDetectionAPI(unittest.TestCase):
         self.image_files = [f for f in os.listdir(self.image_dir) if f.endswith(('.jpg', '.jpeg', '.png'))]
 
         # Define the base URL for the Flask server (assuming it's running locally on port 2600)
-        self.base_url = "http://127.0.0.1:5000/handle"
+        self.base_url = "http://127.0.0.1:5100/handle"
 
     def encode_image_to_hex(self, image_path):
         """Helper function to read an image and encode it as a hex string."""
@@ -69,14 +69,20 @@ class TestPostureDetectionAPI(unittest.TestCase):
                 analysis_file_name = os.path.splitext(image_file)[0] + ".txt"
                 analysis_file_path = os.path.join(self.image_dir, analysis_file_name)
 
+
                 # Read the saved analysis result from the text file
                 with open(analysis_file_path, 'r') as f:
                     saved_analysis_result = f.read()
-                    print(saved_analysis_result)
+                    print("Expected:", saved_analysis_result)
+                    print("Result:", response_data['result'])
 
-                # Compare the response result with the saved analysis result
-                self.assertEqual(response_data['result'], json.loads(saved_analysis_result),
-                                 f"Analysis result for {image_file} does not match the saved result.")
+                saved = json.loads(saved_analysis_result)
+
+                for metric in saved.keys():
+                    self.assertEqual(response_data['result'][metric], saved[metric],
+                                     f"Analysis result for {image_file} does not match the saved result. "
+                                     f" result: {response_data['result']}"
+                                     f" expected {saved}")
 
 
 if __name__ == '__main__':

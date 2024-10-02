@@ -1,0 +1,8 @@
+{
+  "request_type": "store_db" | "get_db",
+            "payload": {
+                "db_table": "",
+                "db_key": "",
+                "db_value": {"sign_up_time": 0}
+            }
+}

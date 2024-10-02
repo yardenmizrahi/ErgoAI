@@ -47,14 +47,14 @@ class PostureDetectionAdapter:
         img = cv2.imdecode(np_array, cv2.IMREAD_COLOR)
 
         request.response = posture_image.process_image_for_pose_analysis(img)
-        url = f'http://{self.dispatcher_address}:{self.dispatcher_port}/'
+        url = f'http://{self.dispatcher_address}:{self.dispatcher_port}/handle'
 
         store_request = {"request_type": "store_db",
                          "session_token": request.session_token,
                          "payload": {"db_table": request.session_token,  # TODO
-                                     "db_key": str(datetime.now()),
+                                     "db_key": request.payload.get("time", str(datetime.now())),
                                      "db_value": json.dumps(request.response)}}
-
+        print("POSTURE: ", url)
         requests.post(url, json=store_request)
         return request.response
 
