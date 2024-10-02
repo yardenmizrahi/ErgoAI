@@ -1,6 +1,6 @@
 import sys
 import tomllib
-from flask import Flask, request, jsonify
+from flask import Flask, render_template, request, send_file, jsonify
 from Dispatcher.Dispatcher import Dispatcher
 from DB.RequestData import RequestData
 
@@ -28,6 +28,7 @@ def enqueue_request():
 
         # Queue the request
         if dispatcher.queue_request(req_data):
+            dispatcher.handle_all_requests()
             return jsonify({"status": "200", "message": "Request queued successfully"}), 200
         else:
             return jsonify({"error": "Request type not recognized"}), 400

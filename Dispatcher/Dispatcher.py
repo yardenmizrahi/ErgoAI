@@ -25,6 +25,7 @@ class Dispatcher:
 
     def process_request(self):
         current_handled_request = self.queue.pop_request()
+        print("DISPATCHER:", current_handled_request.request_type)
         if current_handled_request:
             if current_handled_request.request_type == "analyze":
                 print("Processing analyze request...")
