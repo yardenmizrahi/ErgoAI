@@ -8,7 +8,6 @@ from Posture.PostureDetectionAdapter import PostureDetectionAdapter
 
 app = Flask(__name__)
 adapter = None
-# Initialize the posture detection adapter
 
 
 @app.route('/handle', methods=['POST'])

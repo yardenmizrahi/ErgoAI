@@ -7,7 +7,7 @@ from DB.AbstractDB import AbstractDB
 class CSVDatabase(AbstractDB):
     @staticmethod
     def insert(table: str, key: str, value: str):
-        file_name = table + "_tbl.csv"
+        file_name = CSVDatabase.get_table_filename(table)
         file_exists = os.path.isfile(file_name)
         print(os.path.abspath("."))
 
@@ -32,7 +32,7 @@ class CSVDatabase(AbstractDB):
     @staticmethod
     def get(table: str, key: str | None = None, keys: list | None = None) -> dict:
         out = {}
-        file_name = table + "_tbl.csv"
+        file_name = CSVDatabase.get_table_filename(table)
         if not os.path.isfile(file_name):
             return None
 
@@ -50,3 +50,7 @@ class CSVDatabase(AbstractDB):
                     out[row['key']] = row['value']
 
         return out
+
+    @staticmethod
+    def get_table_filename(table):
+        return os.path.join("tbls", f"{table}_tbl.csv")

@@ -69,7 +69,6 @@ class TestPostureDetectionAPI(unittest.TestCase):
                 analysis_file_name = os.path.splitext(image_file)[0] + ".txt"
                 analysis_file_path = os.path.join(self.image_dir, analysis_file_name)
 
-
                 # Read the saved analysis result from the text file
                 with open(analysis_file_path, 'r') as f:
                     saved_analysis_result = f.read()

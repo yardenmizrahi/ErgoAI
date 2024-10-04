@@ -49,16 +49,19 @@ def authenticate(username, password):
         raise Exception("Authentication failed")
 
 
-# Upload the image to the server
-def upload_image(session_token, user_token, timestamp, image_data):
+def upload_image(username, password, timestamp, image_data):
     upload_payload = {
-        'session_token': session_token,
-        'user_token': user_token,
-        'time': timestamp,
-        'image_data': image_data.hex()  # Convert image data to hex string
+        'session_token': 'session_token',
+        'request_type': 'analyze',
+        'payload': {
+            'username': username,
+            'password': password,
+            'time': timestamp,
+            'image_data': image_data.hex()  # Convert image data to hex string
+        }
     }
 
-    response = requests.post(f"{SERVER_URL}/upload", json=upload_payload)
+    response = requests.post(f"{SERVER_URL}/handle", json=upload_payload)
 
     if response.status_code == 200:
         print("Image uploaded successfully")
@@ -66,21 +69,21 @@ def upload_image(session_token, user_token, timestamp, image_data):
         print("Failed to upload image")
 
 
-# Main function
 def main():
     # Ask for user credentials
     username = input("Enter your username: ")
     password = input("Enter your password: ")
 
     # Authenticate the user and get the session token
-    try:
-        session_token = authenticate(username, password)
-        print(f"Authenticated! Session token: {session_token}")
-    except Exception as e:
-        print(str(e))
-        return
+    # try:
+    #     session_token = authenticate(username, password)
+    #     print(f"Authenticated! Session token: {session_token}")
+    # except Exception as e:
+    #     print(str(e))
+    #     return
 
-    user_token = hash_password(password, SALT)
+
+    salted_password = hash_password(password, SALT)
 
     while True:
         try:
@@ -92,7 +95,7 @@ def main():
             print("Image captured successfully")
 
             # Upload the image to the server
-            upload_image(session_token, user_token, timestamp, image_data)
+            upload_image(username, salted_password, timestamp, image_data)
 
             # Wait for the next interval (e.g., 10 seconds)
             time.sleep(10)

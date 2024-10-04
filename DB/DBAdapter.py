@@ -38,9 +38,11 @@ class DBAdapter:
                 keys: str | None = request.payload.get("db_keys", None)
 
                 if table and key:
-                    return self.db.get(table, key=key)
+                    request.response = self.db.get(table, key=key)
+                    return request.response
                 elif table and keys:
-                    return self.db.get(table, keys=keys)
+                    request.response = self.db.get(table, keys=keys)
+                    return request.response
                 else:
                     return None
 
