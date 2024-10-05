@@ -2,6 +2,7 @@ import hashlib
 import sys
 import io
 import os
+import socket
 import uuid
 import tomllib
 import json
@@ -49,7 +50,7 @@ def generate_client():
     username = request.form['username']
     password = request.form['password']
 
-    server_url = request.endpoint
+    server_url = f"http://{ socket.gethostbyname(socket.gethostname())}:{sys.argv[1]}"
 
     compiled_client = None
 
@@ -144,7 +145,7 @@ def main():
         dispatcher = Dispatcher(config)
     except Exception as e:
         print(e.with_traceback())
-    app.run(port=int(sys.argv[1]))
+    app.run(port=int(sys.argv[1]), host="0.0.0.0")
 
 
 if __name__ == '__main__':
