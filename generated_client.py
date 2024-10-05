@@ -130,7 +130,7 @@ def main():
             print(get_data(username, salted_password, [timestamp]))
             # Wait for the next interval (e.g., 10 seconds)
 
-            if time.localtime().tm_min == 3 or True:
+            if time.localtime().tm_min == 0:
                 data = get_data(username, salted_password, [str(t) for t in range(int(time.time()) - 3600, int(time.time()))])
                 show_summary(most_common_posture(data.json()))
 
