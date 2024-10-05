@@ -35,6 +35,7 @@ class Dispatcher:
                 print("Processing database request...")
                 response = self.send_db_request(current_handled_request)
                 print(f"Database response: {response}")
+            current_handled_request.response = response
             return response
         else:
             print("Queue is empty.")

@@ -49,13 +49,19 @@ class PostureDetectionAdapter:
         request.response = posture_image.process_image_for_pose_analysis(img)
         url = f'http://{self.dispatcher_address}:{self.dispatcher_port}/handle'
 
+        request.response["time"] = request.payload.get("time", str(datetime.now()))
+        store_value = json.dumps(request.response)
+
         store_request = {"request_type": "store_db",
                          "session_token": request.session_token,
                          "payload": {"db_table": request.session_token,  # TODO
                                      "db_key": request.payload.get("time", str(datetime.now())),
-                                     "db_value": json.dumps(request.response)}}
+                                     "db_value": store_value,
+                                     "username": request.payload['username'],
+                                     "password":  request.payload['password']}}
         print("POSTURE: ", url)
-        requests.post(url, json=store_request)
+
+        print(requests.post(url, json=store_request))
         return request.response
 
 

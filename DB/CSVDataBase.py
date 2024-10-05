@@ -46,7 +46,7 @@ class CSVDatabase(AbstractDB):
             reader = csv.DictReader(csvfile)
 
             for row in reader:
-                if row['key'] in keys:
+                if str(row['key']) in keys:
                     out[row['key']] = row['value']
 
         return out

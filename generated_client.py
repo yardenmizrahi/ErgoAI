@@ -7,9 +7,14 @@ import hashlib
 import cv2
 import requests
 import time
+import tkinter as tk
+from tkinter import messagebox
+import json
+from collections import Counter
 
 SERVER_URL = >>>SERVER_URL<<<
 SALT = >>>SALT<<<
+
 
 # Hash the password with the generated salt
 def hash_password(password, salt):
@@ -18,7 +23,7 @@ def hash_password(password, salt):
 
 # Capture an image from the webcam
 def capture_image():
-    cap = cv2.VideoCapture(0)  # 0 is the default camera
+    cap = cv2.VideoCapture(0)
     ret, frame = cap.read()
 
     if ret:
@@ -31,27 +36,9 @@ def capture_image():
         raise Exception("Failed to capture image")
 
 
-# Authenticate the user and get a session token
-def authenticate(username, password):
-    hashed_password = hash_password(password, SALT)
-
-    # Prepare the authentication payload
-    auth_payload = {
-        'username': username,
-        'user_token': hashed_password
-    }
-
-    response = requests.post(f"{SERVER_URL}/getdata", json=auth_payload)
-
-    if response.status_code == 200:
-        return response.json().get("session_token")
-    else:
-        raise Exception("Authentication failed")
-
-
 def upload_image(username, password, timestamp, image_data):
     upload_payload = {
-        'session_token': 'session_token',
+        'session_token': username,
         'request_type': 'analyze',
         'payload': {
             'username': username,
@@ -67,6 +54,50 @@ def upload_image(username, password, timestamp, image_data):
         print("Image uploaded successfully")
     else:
         print("Failed to upload image")
+
+
+def get_data(username, password, keys=[]):
+    payload = {
+        'session_token': username,
+        'request_type': 'get_db',
+        'payload': {
+            'username': username,
+            'password': password,
+            "db_table": username,
+            'db_keys': keys,
+        }
+    }
+
+    response = requests.post(f"{SERVER_URL}/handle", json=payload)
+    return response
+
+
+def show_summary(data):
+    # Create the main Tkinter window
+    root = tk.Tk()
+    root.withdraw()
+    # root.after(10, lambda: root.destroy())  # Close the mainloop automatically
+    messagebox.showinfo("Posture", f"Summary for the last minute:\n{data}")
+    root.destroy()
+    # Show the window and keep it updated without blocking
+    # root.mainloop()  # Start the mainloop to show the window
+
+
+def most_common_posture(data_dict):
+    # Step 1: Parse the JSON strings into Python dictionaries
+    postures = []
+
+    for value in data_dict.values():
+        parsed_value = json.loads(value)
+        posture = parsed_value.get("posture")  # Extract the "posture" key
+        if posture:
+            postures.append(posture)
+
+    # Step 2: Use Counter to find the most common posture
+    counter = Counter(postures)
+    most_common = counter.most_common(1)[0]  # Get the most common posture and its frequency
+
+    return most_common[0]
 
 
 def main():
@@ -88,7 +119,7 @@ def main():
     while True:
         try:
             # Capture the current timestamp
-            timestamp = int(time.time())
+            timestamp = str(int(time.time()))
 
             # Capture an image from the webcam
             image_data = capture_image()
@@ -96,8 +127,13 @@ def main():
 
             # Upload the image to the server
             upload_image(username, salted_password, timestamp, image_data)
-
+            print(get_data(username, salted_password, [timestamp]))
             # Wait for the next interval (e.g., 10 seconds)
+
+            if time.localtime().tm_min == 3 or True:
+                data = get_data(username, salted_password, [str(t) for t in range(int(time.time()) - 3600, int(time.time()))])
+                show_summary(most_common_posture(data.json()))
+
             time.sleep(10)
 
         except Exception as e:

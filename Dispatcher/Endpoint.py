@@ -106,6 +106,7 @@ def enqueue_request():
                 return jsonify({"error": "Invalid password"}), 403
         else:
             # New user, save credentials
+            print("new user")
             users[username] = password
             save_users(users)
 
@@ -119,6 +120,12 @@ def enqueue_request():
         # Queue the request
         if dispatcher.queue_request(req_data):
             dispatcher.handle_all_requests()
+            if data["request_type"] == "get_db":
+                timeout = 99
+                while req_data.response is None and timeout > 0:
+                    print(req_data.response)
+                    timeout -= 1
+                return jsonify(req_data.response), 200
             return jsonify({"status": "200", "message": "Request queued successfully"}), 200
         else:
             return jsonify({"error": "Request type not recognized"}), 400
