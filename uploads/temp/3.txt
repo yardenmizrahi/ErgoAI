@@ -1,3 +1,0 @@
-{
-    "1728140831": "{\"hands\": \"Not Folding Hands\", \"kneeling\": \"Not kneeling\", \"posture\": \"Hunchback\", \"time\": \"1728140831\"}"
-}

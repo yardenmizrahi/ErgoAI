@@ -1,3 +1,0 @@
-{
-    "1728140808": "{\"hands\": \"Unable to detect arm joints\", \"kneeling\": \"legs not detected\", \"posture\": \"Straight\", \"time\": \"1728140808\"}"
-}
