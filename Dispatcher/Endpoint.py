@@ -50,7 +50,7 @@ def generate_client():
     username = request.form['username']
     password = request.form['password']
 
-    server_url = f"http://{ socket.gethostbyname(socket.gethostname())}:{sys.argv[1]}"
+    server_url = f"http://{socket.gethostbyname(socket.gethostname())}:{sys.argv[1]}"
 
     compiled_client = None
 

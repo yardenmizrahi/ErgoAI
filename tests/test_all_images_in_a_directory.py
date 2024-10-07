@@ -6,8 +6,8 @@ import json
 
 import requests
 
-IMAGE_DIRECTORY = r"C:\Users\odedg\PycharmProjects\ErgoAI-post\uploads\temp"
-RESULT_DIRECTORY = r"C:\Users\odedg\PycharmProjects\ErgoAI-post\uploads\temp"
+IMAGE_DIRECTORY = r"C:\Users\Oded\PycharmProjects\ErgoAI\uploads\temp3"
+RESULT_DIRECTORY = r"C:\Users\Oded\PycharmProjects\ErgoAI\uploads\temp3"
 
 
 def hash_password(password, salt):

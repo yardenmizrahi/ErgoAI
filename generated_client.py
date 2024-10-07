@@ -72,12 +72,30 @@ def get_data(username, password, keys=[]):
     return response
 
 
+def feedback_generation(posture):
+    if posture == "Straight":
+        return ("Your posture is excellent!\n"
+                "Your back is maintaining the natural curve,\n"
+                "minimizing strain on your spine and reducing the risk of developing musculoskeletal disorders (WMSD).\n"
+                "Keep up the good work to maintain optimal spinal alignment and prevent back pain.")
+    elif posture == "Reclined":
+        return ("Your back is leaning too far backward,\n"
+                "which places unnecessary stress on your lumbar spine and\n"
+                "can lead to discomfort or even long-term musculoskeletal issues.\n"
+                "Try adjusting your posture to sit more upright\n"
+                "and ensure your lower back is properly supported to avoid strain.")
+    elif posture == "Hunchback":
+        return ("You are leaning forward, which can cause excessive pressure on your cervical spine and shoulders.\n"
+                "This position is a known contributor to musculoskeletal disorders,\n"
+                "including neck and upper back pain.\n"
+                "Please correct your posture by sitting back and aligning your spine to reduce the risk of discomfort.")
+
 def show_summary(data):
     # Create the main Tkinter window
     root = tk.Tk()
     root.withdraw()
     # root.after(10, lambda: root.destroy())  # Close the mainloop automatically
-    messagebox.showinfo("Posture", f"Summary for the last minute:\n{data}")
+    messagebox.showinfo("Posture", f"Summary for the last hour:\n{feedback_generation(data)}")
     root.destroy()
     # Show the window and keep it updated without blocking
     # root.mainloop()  # Start the mainloop to show the window
